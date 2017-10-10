@@ -1,0 +1,20 @@
+{
+    "name": "leonis/google-authenticator",
+    "description": "Google Authenticator",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "yangliu",
+            "email": "yangliulnn@163.com"
+        }
+    ],
+    "require": {
+        "endroid/qrcode": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Leonis\\GoogleAuthenticator\\": "src/"
+        }
+    }
+}
