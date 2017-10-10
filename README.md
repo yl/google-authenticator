@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/leonis/google-authenticator/license?format=flat-square)](https://packagist.org/packages/leonis/google-authenticator)
 
 # google-authenticator
-Google Authenticator
+Google Authenticator Forked from [PHPGangsta/GoogleAuthenticator](https://github.com/PHPGangsta/GoogleAuthenticator)
 
 ## Installation
 ```
