@@ -9,7 +9,7 @@ Google Authenticator
 
 ## Installation
 ```
-composer require leonis/google-authenticator:dev-master
+composer require leonis/google-authenticator
 ```
 
 ## Usage
