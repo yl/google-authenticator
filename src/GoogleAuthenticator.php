@@ -15,8 +15,9 @@ class GoogleAuthenticator
      *
      * @param int $length
      *
-     * @return string
      * @throws \Exception
+     *
+     * @return string
      */
     public function secret($length = 16)
     {
@@ -61,7 +62,7 @@ class GoogleAuthenticator
         }
         $secretKey = $this->base32Decode($secret);
         // Pack time into binary string
-        $time = chr(0) . chr(0) . chr(0) . chr(0) . pack('N*', $timeSlice);
+        $time = chr(0).chr(0).chr(0).chr(0).pack('N*', $timeSlice);
         // Hash it with users secret key
         $hm = hash_hmac('SHA1', $time, $secretKey, true);
         // Use last nipple of result as index/offset
@@ -79,7 +80,7 @@ class GoogleAuthenticator
     }
 
     /**
-     * Get QrCode
+     * Get QrCode.
      *
      * @param      $name
      * @param      $secret
@@ -89,9 +90,9 @@ class GoogleAuthenticator
      */
     public function qrCode($name, $secret, $title = null)
     {
-        $urlencoded = 'otpauth://totp/' . $name . '?secret=' . $secret . '';
+        $urlencoded = 'otpauth://totp/'.$name.'?secret='.$secret.'';
         if (isset($title)) {
-            $urlencoded .= '&issuer=' . urlencode($title);
+            $urlencoded .= '&issuer='.urlencode($title);
         }
         $qrCode = new QrCode($urlencoded);
 

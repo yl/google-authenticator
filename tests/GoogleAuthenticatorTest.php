@@ -73,7 +73,7 @@ class GoogleAuthenticatorTest extends TestCase
         $result = $this->googleAuthenticator->verify($secret, $code);
         $this->assertEquals(true, $result);
 
-        $code = '0' . $code;
+        $code = '0'.$code;
         $result = $this->googleAuthenticator->verify($secret, $code);
         $this->assertEquals(false, $result);
     }
