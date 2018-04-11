@@ -35,7 +35,7 @@ class GoogleAuthenticatorTest extends TestCase
 
     public function testCreateSecretLengthCanBeSpecified()
     {
-        for ($secretLength = 16; $secretLength < 100; ++$secretLength) {
+        for ($secretLength = 16; $secretLength < 100; $secretLength++) {
             $secret = $this->googleAuthenticator->secret($secretLength);
             $this->assertEquals(strlen($secret), $secretLength);
         }

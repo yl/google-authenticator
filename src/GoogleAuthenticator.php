@@ -37,7 +37,7 @@ class GoogleAuthenticator
             }
         }
         if ($rnd !== false) {
-            for ($i = 0; $i < $length; ++$i) {
+            for ($i = 0; $i < $length; $i++) {
                 $secret .= $base32Chars[ord($rnd[$i]) & 31];
             }
         } else {
@@ -117,7 +117,7 @@ class GoogleAuthenticator
         if (strlen($code) != 6) {
             return false;
         }
-        for ($i = -$discrepancy; $i <= $discrepancy; ++$i) {
+        for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $calculatedCode = $this->code($secret, $currentTimeSlice + $i);
             if ($this->timingSafeEquals($calculatedCode, $code)) {
                 return true;
@@ -160,7 +160,7 @@ class GoogleAuthenticator
         if (!in_array($paddingCharCount, $allowedValues)) {
             return false;
         }
-        for ($i = 0; $i < 4; ++$i) {
+        for ($i = 0; $i < 4; $i++) {
             if ($paddingCharCount == $allowedValues[$i] &&
                 substr($secret, -($allowedValues[$i])) != str_repeat($base32chars[32], $allowedValues[$i])) {
                 return false;
@@ -174,11 +174,11 @@ class GoogleAuthenticator
             if (!in_array($secret[$i], $base32chars)) {
                 return false;
             }
-            for ($j = 0; $j < 8; ++$j) {
+            for ($j = 0; $j < 8; $j++) {
                 $x .= str_pad(base_convert(@$base32charsFlipped[@$secret[$i + $j]], 10, 2), 5, '0', STR_PAD_LEFT);
             }
             $eightBits = str_split($x, 8);
-            for ($z = 0; $z < count($eightBits); ++$z) {
+            for ($z = 0; $z < count($eightBits); $z++) {
                 $binaryString .= (($y = chr(base_convert($eightBits[$z], 2, 10))) || ord($y) == 48) ? $y : '';
             }
         }
@@ -222,7 +222,7 @@ class GoogleAuthenticator
             return false;
         }
         $result = 0;
-        for ($i = 0; $i < $userLen; ++$i) {
+        for ($i = 0; $i < $userLen; $i++) {
             $result |= (ord($safeString[$i]) ^ ord($userString[$i]));
         }
 
