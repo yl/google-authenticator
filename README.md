@@ -14,15 +14,15 @@ composer require leonis/google-authenticator
 
 ## Usage
 ```php
-$authenticator = new \Leonis\GoogleAuthenticator\GoogleAuthenticator();
+use \Leonis\GoogleAuthenticator\GoogleAuthenticator;
 
-$secret = $authenticator->secret();
+$secret = GoogleAuthenticator::secret();
 
-$qrCode = $authenticator->qrCode('leonis', $secret)->writeDataUri();
+$qrCode = GoogleAuthenticator::qrCode('leonis', $secret)->writeDataUri();
 
-$code = $authenticator->code($secret);
+$code = GoogleAuthenticator::code($secret);
 
-$result = $authenticator->verify($secret,$code);
+$result = GoogleAuthenticator::verify($secret,$code);
 ```
 
 ## License
