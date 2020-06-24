@@ -12,9 +12,9 @@ class GoogleAuthenticator
      *
      * @param int $length
      *
-     * @return string
      * @throws \Exception
      *
+     * @return string
      */
     public static function secret($length = 16)
     {
