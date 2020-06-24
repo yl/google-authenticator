@@ -33,7 +33,7 @@ class GoogleAuthenticatorTest extends TestCase
      */
     public function testGetCodeReturnsCorrectValues($secret, $timeSlice, $code)
     {
-        $this->assertEquals($code, GoogleAuthenticator::code($secret, $timeSlice));
+        $this->assertEquals($code, GoogleAuthenticator::code($secret, 6, $timeSlice));
     }
 
     public function testVerify()

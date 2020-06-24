@@ -97,7 +97,7 @@ class GoogleAuthenticator
             return false;
         }
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
-            $calculatedCode = self::code($secret, $currentTimeSlice + $i);
+            $calculatedCode = self::code($secret, 6, $currentTimeSlice + $i);
             if (self::timingSafeEquals($calculatedCode, $code)) {
                 return true;
             }
