@@ -2,26 +2,23 @@
 
 namespace Leonis\GoogleAuthenticator;
 
-use Endroid\QrCode\QrCode;
 use Exception;
 
 class GoogleAuthenticator
 {
-    protected $codeLength = 6;
-
     /**
      * Create new secret.
      * 16 characters, randomly chosen from the allowed base32 characters.
      *
      * @param int $length
      *
+     * @return string
      * @throws \Exception
      *
-     * @return string
      */
-    public function secret($length = 16)
+    public static function secret($length = 16)
     {
-        $base32Chars = $this->base32Chars();
+        $base32Chars = self::base32Chars();
         // Valid secret lengths are 80 to 640 bits
         if ($length < 16 || $length > 128) {
             throw new Exception('Bad secret length');
@@ -51,16 +48,17 @@ class GoogleAuthenticator
      * Calculate the code, with given secret and point in time.
      *
      * @param string   $secret
+     * @param int      $codeLength
      * @param int|null $timeSlice
      *
      * @return string
      */
-    public function code($secret, $timeSlice = null)
+    public static function code($secret, $codeLength = 6, $timeSlice = null)
     {
         if ($timeSlice === null) {
             $timeSlice = floor(time() / 30);
         }
-        $secretKey = $this->base32Decode($secret);
+        $secretKey = self::base32Decode($secret);
         // Pack time into binary string
         $time = chr(0).chr(0).chr(0).chr(0).pack('N*', $timeSlice);
         // Hash it with users secret key
@@ -74,29 +72,9 @@ class GoogleAuthenticator
         $value = $value[1];
         // Only 32 bits
         $value = $value & 0x7FFFFFFF;
-        $modulo = pow(10, $this->codeLength);
+        $modulo = pow(10, $codeLength);
 
-        return str_pad($value % $modulo, $this->codeLength, '0', STR_PAD_LEFT);
-    }
-
-    /**
-     * Get QrCode.
-     *
-     * @param      $name
-     * @param      $secret
-     * @param null $title
-     *
-     * @return \Endroid\QrCode\QrCode
-     */
-    public function qrCode($name, $secret, $title = null)
-    {
-        $urlencoded = 'otpauth://totp/'.$name.'?secret='.$secret.'';
-        if (isset($title)) {
-            $urlencoded .= '&issuer='.urlencode($title);
-        }
-        $qrCode = new QrCode($urlencoded);
-
-        return $qrCode;
+        return str_pad($value % $modulo, $codeLength, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -104,41 +82,28 @@ class GoogleAuthenticator
      *
      * @param string   $secret
      * @param string   $code
+     * @param int      $codeLength
      * @param int      $discrepancy      This is the allowed time drift in 30 second units (8 means 4 minutes before or after)
      * @param int|null $currentTimeSlice time slice if we want use other that time()
      *
      * @return bool
      */
-    public function verify($secret, $code, $discrepancy = 1, $currentTimeSlice = null)
+    public static function verify($secret, $code, $codeLength = 6, $discrepancy = 1, $currentTimeSlice = null)
     {
         if ($currentTimeSlice === null) {
             $currentTimeSlice = floor(time() / 30);
         }
-        if (strlen($code) != 6) {
+        if (strlen($code) != $codeLength) {
             return false;
         }
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
-            $calculatedCode = $this->code($secret, $currentTimeSlice + $i);
-            if ($this->timingSafeEquals($calculatedCode, $code)) {
+            $calculatedCode = self::code($secret, $currentTimeSlice + $i);
+            if (self::timingSafeEquals($calculatedCode, $code)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * Set the code length, should be >=6.
-     *
-     * @param int $length
-     *
-     * @return \Leonis\GoogleAuthenticator\GoogleAuthenticator
-     */
-    public function setCodeLength($length)
-    {
-        $this->codeLength = $length;
-
-        return $this;
     }
 
     /**
@@ -148,12 +113,12 @@ class GoogleAuthenticator
      *
      * @return bool|string
      */
-    protected function base32Decode($secret)
+    protected static function base32Decode($secret)
     {
         if (empty($secret)) {
             return '';
         }
-        $base32chars = $this->base32Chars();
+        $base32chars = self::base32Chars();
         $base32charsFlipped = array_flip($base32chars);
         $paddingCharCount = substr_count($secret, $base32chars[32]);
         $allowedValues = [6, 4, 3, 1, 0];
@@ -191,7 +156,7 @@ class GoogleAuthenticator
      *
      * @return array
      */
-    protected function base32Chars()
+    protected static function base32Chars()
     {
         return [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', //  7
@@ -211,7 +176,7 @@ class GoogleAuthenticator
      *
      * @return bool True if the two strings are identical
      */
-    private function timingSafeEquals($safeString, $userString)
+    private static function timingSafeEquals($safeString, $userString)
     {
         if (function_exists('hash_equals')) {
             return hash_equals($safeString, $userString);

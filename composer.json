@@ -9,9 +9,6 @@
             "email": "yangliulnn@163.com"
         }
     ],
-    "require": {
-        "endroid/qr-code": "^3.2"
-    },
     "require-dev": {
         "phpunit/phpunit": "~6.0"
     },
