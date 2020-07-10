@@ -18,8 +18,6 @@ use \Leonis\GoogleAuthenticator\GoogleAuthenticator;
 
 $secret = GoogleAuthenticator::secret();
 
-$qrCode = GoogleAuthenticator::qrCode('leonis', $secret)->writeDataUri();
-
 $code = GoogleAuthenticator::code($secret);
 
 $result = GoogleAuthenticator::verify($secret,$code);
